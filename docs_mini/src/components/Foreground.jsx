@@ -1,49 +1,54 @@
 import Card from "./Card"
 import { useDropzone } from "react-dropzone"
 import { useEffect, useState, useRef } from "react"
+import { mainStore } from './mainStore'
 
 function Foreground() {
   const ref = useRef(null)
   const [data, setData] = useState([])
+  const [uploadedFile, setUploadedFile] = useState()
+  const { setIsDrag } = mainStore();
 
-  const [uploadedFiles, setUploadedFiles] = useState([])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     noClick: true,
     accept: { 'text/plain': ['.txt'] },
     onDrop: (acceptedFiles) => {
       if (acceptedFiles.length > 0) {
-        setUploadedFiles([...uploadedFiles, acceptedFiles[0]]);
+        setUploadedFile(acceptedFiles[0]);
       } 
     },
   });
 
   useEffect(() => {
-    if (uploadedFiles.length > 0) {
-      uploadedFiles.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const content = e.target.result;
-          const title = file.name.split(".")[0];
-          const size = file.size;
-          const description = content.slice(0, 100);
-          const tagDetails = {
-            isOpen: true,
-            tagTitle: "New",
-            tagColor: "rgb(232,145,47)", // rgb(37, 99, 235) rgb(22, 163, 74)
-          };
-          const download = true;
-          setData((prevData) => [
-            ...prevData,
-            { title, size, description, tagDetails, download },
-          ]);
+    setIsDrag(isDragActive);
+  }
+  , [isDragActive]);
+
+  useEffect(() => {
+    if (uploadedFile) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target.result;
+        const title = uploadedFile.name.split(".")[0];
+        const size = uploadedFile.size / 1000 + " KB";
+        const description = content.slice(0, 100);
+        const tagDetails = {
+          isOpen: true,
+          tagTitle: "Download",
+          tagColor: "rgb(22, 163, 74)", // rgb(37, 99, 235) rgb(22, 163, 74) rgb(232,145,47)
         };
-        reader.readAsText(file);
-      });
+        const download = true;
+        setData((prevData) => [
+          ...prevData,
+          { title, size, description, tagDetails, download },
+        ]);
+      };
+      reader.readAsText(uploadedFile);
     }
 
-    console.log(uploadedFiles);
+    console.log(uploadedFile);
   }
-  , [uploadedFiles]);
+  , [uploadedFile]);
 
   return (
     <div 
@@ -64,7 +69,7 @@ function Foreground() {
         tabIndex={-1}
         className="hidden"
       />
-      
+
       <div ref={ref} className="fixed w-full h-full flex gap-6 flex-wrap p-5">
         {data.map((item, index) => (
           <Card
@@ -75,6 +80,7 @@ function Foreground() {
             tagDetails={item.tagDetails}
             download={item.download}
             reference={ref}
+            setData={setData}
           />
         ))}
       </div>
