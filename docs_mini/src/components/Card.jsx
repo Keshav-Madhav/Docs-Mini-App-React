@@ -1,6 +1,7 @@
 import { FaRegFileAlt } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
 import { LuDownload } from 'react-icons/lu'
+import { motion } from "framer-motion"
 
 const Card = ({
   title,
@@ -8,9 +9,10 @@ const Card = ({
   description,
   tagDetails: { isOpen, tagTitle, tagColor },
   download,
+  reference,
 }) => {
   return (
-    <div className="relative flex-shrink-0 w-60 h-72 rounded-[40px] bg-zinc-900/90 text-white py-8 px-6 overflow-hidden">
+    <motion.div drag dragConstraints={reference} whileDrag={{scale: 1.1}} dragElastic={0.3} dragTransition={{bounceStiffness: 200, bounceDamping:20}} className="relative flex-shrink-0 w-60 h-72 rounded-[40px] bg-zinc-900/90 text-white py-8 px-6 overflow-hidden">
       <div className='flex items-center gap-2'>
         <FaRegFileAlt />
         <h3 className='text-md font-semibold'>{title}</h3>
@@ -38,7 +40,7 @@ const Card = ({
         )}
 
       </div>
-    </div>
+    </motion.div>
   )
 }
 

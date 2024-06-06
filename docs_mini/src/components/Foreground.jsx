@@ -1,7 +1,8 @@
 import Card from "./Card"
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 function Foreground() {
+  const ref = useRef(null)
   const [data, setData] = useState([
     {
       title: "File 1",
@@ -60,7 +61,7 @@ function Foreground() {
     },
   ])
   return (
-    <div className="fixed z-[3] w-full h-full top-0 left-0 flex gap-6 flex-wrap p-5">
+    <div ref={ref} className="fixed z-[3] w-full h-full top-0 left-0 flex gap-6 flex-wrap p-5">
       {data.map((item, index) => (
         <Card
           key={index}
@@ -69,6 +70,7 @@ function Foreground() {
           description={item.description}
           tagDetails={item.tagDetails}
           download={item.download}
+          reference={ref}
         />
       ))}
     </div>
