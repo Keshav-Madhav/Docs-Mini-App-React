@@ -20,7 +20,7 @@ const Card = ({
     setData((prevData) => {
       const newData = [...prevData];
       newData.forEach((item) => {
-        if (item.title === data.title) {
+        if (item.id === data.id) {
           item.tagDetails = {
             isOpen: true,
             tagTitle: "Downloaded",
@@ -39,7 +39,7 @@ const Card = ({
     setData((prevData) => {
       const newData = [...prevData];
       newData.forEach((item) => {
-        if (item.title === data.title) {
+        if (item.id === data.id) {
           item.description = e.target.value;
 
           const blob = new Blob([item.description], {type: 'text/plain'});
@@ -60,7 +60,7 @@ const Card = ({
     setData((prevData) => {
       const newData = [...prevData];
       newData.forEach((item) => {
-        if (item.title === data.title) {
+        if (item.id === data.id) {
           item.title = e.target.value;
           item.download = true;
           item.tagDetails = {
@@ -76,7 +76,7 @@ const Card = ({
 
   function removeNote() {
     setData((prevData) => {
-      const newData = prevData.filter((item) => item.title !== data.title);
+      const newData = prevData.filter((item) => item.id !== data.id);
       return newData;
     })
   }

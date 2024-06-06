@@ -2,12 +2,14 @@ import Card from "./Card"
 import { useDropzone } from "react-dropzone"
 import { useEffect, useState, useRef } from "react"
 import { mainStore } from './mainStore'
+import AddNewCard from "./AddNewCard"
 
 function Foreground() {
   const ref = useRef(null)
   const [data, setData] = useState([])
   const [uploadedFile, setUploadedFile] = useState()
   const { setIsDrag } = mainStore();
+  const [count, setCount] = useState(0);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     noClick: true,
@@ -15,6 +17,7 @@ function Foreground() {
     onDrop: (acceptedFiles) => {
       if (acceptedFiles.length > 0) {
         setUploadedFile(acceptedFiles[0]);
+        setCount(count + 1);
       } 
     },
   });
@@ -38,9 +41,10 @@ function Foreground() {
           tagColor: "rgb(232,145,47)", // rgb(37, 99, 235) rgb(22, 163, 74) rgb(232,145,47)
         };
         const download = true;
+        const id = count;
         setData((prevData) => [
           ...prevData,
-          { title, size, description, tagDetails, download },
+          { title, size, description, tagDetails, download, id },
         ]);
       };
       reader.readAsText(uploadedFile);
@@ -70,10 +74,12 @@ function Foreground() {
         className="hidden"
       />
 
+
       <div ref={ref} className="fixed w-full h-full flex gap-6 flex-wrap p-5">
-        {data.map((item, index) => (
+        {(data.length < ((window.innerWidth * window.innerHeight) / (240*160*2))) && (<AddNewCard setData={setData} reference={ref} data={data} setCount={setCount} count={count}/>)}
+        {data.map((item) => (
           <Card
-            key={index}
+            key={item.id}
             data={item}
             reference={ref}
             setData={setData}
