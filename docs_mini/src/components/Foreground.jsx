@@ -34,8 +34,8 @@ function Foreground() {
         const description = content.slice(0, 100);
         const tagDetails = {
           isOpen: true,
-          tagTitle: "Download",
-          tagColor: "rgb(22, 163, 74)", // rgb(37, 99, 235) rgb(22, 163, 74) rgb(232,145,47)
+          tagTitle: "New",
+          tagColor: "rgb(232,145,47)", // rgb(37, 99, 235) rgb(22, 163, 74) rgb(232,145,47)
         };
         const download = true;
         setData((prevData) => [
@@ -74,11 +74,7 @@ function Foreground() {
         {data.map((item, index) => (
           <Card
             key={index}
-            title={item.title}
-            size={item.size}
-            description={item.description}
-            tagDetails={item.tagDetails}
-            download={item.download}
+            data={item}
             reference={ref}
             setData={setData}
           />
