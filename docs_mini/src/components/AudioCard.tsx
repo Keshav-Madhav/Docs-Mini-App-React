@@ -3,21 +3,29 @@ import { FaRegFileAlt } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
 import { LuDownload } from 'react-icons/lu'
 import { motion } from "framer-motion"
+import AudioPlayer from './AudioPlayer/AudioPlayer'
 
-const Card = ({
+type Props = {
+  data: audioCard,
+  reference: React.RefObject<HTMLDivElement>,
+  setData: React.Dispatch<React.SetStateAction<audioCard[]>>
+}
+
+const AudioCard = ({
   data,
   reference,
   setData,
-}) => {
+}:Props) => {
 
   function downloadFile() {
-    const blob = new Blob([data.description], {type: 'text/plain'});
+    const blob = new Blob([data.audioBlob], {type: 'audio/mpeg'});
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = data.title + '.txt';
+    link.download = data.title + '.mp3';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
     setData((prevData) => {
       const newData = [...prevData];
       newData.forEach((item) => {
@@ -32,29 +40,6 @@ const Card = ({
       });
       return newData;
     });
-  }
-
-  function handleDescriptionChange(e) {
-    e.target.style.height = 'inherit';
-    e.target.style.height = `${e.target.scrollHeight-2}px`; 
-    setData((prevData) => {
-      const newData = [...prevData];
-      newData.forEach((item) => {
-        if (item.id === data.id) {
-          item.description = e.target.value;
-
-          const blob = new Blob([item.description], {type: 'text/plain'});
-          item.size = blob.size / 1000 + " KB";
-          item.download = true;
-          item.tagDetails = {
-            isOpen: true,
-            tagTitle: "Updated",
-            tagColor: "rgb(37, 99, 235)",
-          };
-        }
-      });
-      return newData;
-    })
   }
 
   function handleNameChange(e) {
@@ -92,7 +77,7 @@ const Card = ({
         bounceStiffness: 200, 
         bounceDamping:20
       }} 
-      className="relative flex-shrink-0 flex flex-col gap-4 w-60 h-fit min-h-40 rounded-[40px] bg-zinc-900/90 text-white overflow-hidden"
+      className="relative flex-shrink-0 flex flex-col w-80 h-fit rounded-[40px] bg-zinc-900/90 text-white overflow-hidden"
     >
       <div className='flex flex-col gap-4 w-full h-fit px-7 pt-8'>
         <div className='flex items-center gap-2'>
@@ -105,11 +90,17 @@ const Card = ({
             }}
           />
         </div>
-        <textarea
-          className='text-sm font-semibold leading-tight bg-transparent text-white outline-none resize-none overflow-hidden'
-          value={data.description}
-          onChange={(e) => {
-            handleDescriptionChange(e);
+        {/* <audio
+          controls
+          controlsList='nofullscreen nodownload noremoteplayback noplaybackrate'
+          src={URL.createObjectURL(data.audioBlob)}
+          className='w-full h-8 '
+        /> */}
+
+        <AudioPlayer 
+          currentSong={{
+            title: data.title,
+            src: URL.createObjectURL(data.audioBlob)
           }}
         />
       </div>
@@ -139,4 +130,4 @@ const Card = ({
   )
 }
 
-export default Card
+export default AudioCard

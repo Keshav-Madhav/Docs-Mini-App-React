@@ -1,21 +1,23 @@
 import React from "react"
-import Card from "./Card"
+import TextCard from "./TextCard"
 import { useDropzone } from "react-dropzone"
 import { useEffect, useState, useRef } from "react"
 import { mainStore } from './mainStore'
 import AddNewCard from "./AddNewCard"
 import { AnimatePresence } from "framer-motion"
+import AudioCard from "./AudioCard"
 
 function Foreground() {
   const ref = useRef(null)
-  const [data, setData] = useState<textCard[]>([])
+  const [textData, setTextData] = useState<textCard[]>([])
+  const [audioData, setAudioData] = useState<audioCard[]>([])
   const [uploadedFile, setUploadedFile] = useState<File>()
   const { setIsDrag } = mainStore();
   const [count, setCount] = useState(0);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     noClick: true,
-    accept: { 'text/plain': ['.txt'] },
+    accept: { 'text/plain': ['.txt'], 'audio/mpeg': ['.mp3'] },
     onDrop: (acceptedFiles) => {
       if (acceptedFiles.length > 0) {
         setUploadedFile(acceptedFiles[0]);
@@ -37,7 +39,6 @@ function Foreground() {
           const content = e.target.result;
           const title = uploadedFile.name.split(".")[0];
           const size = uploadedFile.size / 1000 + " KB";
-          const description = content.toString().slice(0, 100);
           const tagDetails = {
             isOpen: true,
             tagTitle: "New",
@@ -45,26 +46,48 @@ function Foreground() {
           };
           const download = true;
           const id = count;
-          setData((prevData) => {
-            const newData = [...prevData];
-            newData.push({
-              title,
-              size,
-              description,
-              tagDetails,
-              download,
-              id,
+  
+          // Check the file type
+          if (uploadedFile.type === 'text/plain') {
+            const description = content.toString().slice(0, 100);
+            setTextData((prevData) => {
+              const newData = [...prevData];
+              newData.push({
+                title,
+                size,
+                description,
+                tagDetails,
+                download,
+                id,
+              });
+              return newData;
             });
-            return newData;
-          });
+          } else if (uploadedFile.type === 'audio/mpeg') {
+            const audioBlob = new Blob([content], { type: 'audio/mpeg' });
+            setAudioData((prevData) => {
+              const newData = [...prevData];
+              newData.push({
+                title,
+                size,
+                audioBlob,
+                tagDetails,
+                download,
+                id,
+              });
+              return newData;
+            });
+          }
         }
       };
-      reader.readAsText(uploadedFile);
+  
+      // Read the file based on its type
+      if (uploadedFile.type === 'text/plain') {
+        reader.readAsText(uploadedFile);
+      } else if (uploadedFile.type === 'audio/mpeg') {
+        reader.readAsArrayBuffer(uploadedFile);
+      }
     }
-
-    console.log(uploadedFile);
-  }
-  , [uploadedFile]);
+  }, [uploadedFile]);
 
   return (
     <div 
@@ -88,14 +111,31 @@ function Foreground() {
 
 
       <div ref={ref} className="fixed w-full h-full flex gap-6 flex-wrap p-5">
-        {(data.length < ((window.innerWidth * window.innerHeight) / (240*160*2))) && (<AddNewCard setData={setData} reference={ref} data={data} setCount={setCount} count={count}/>)}
+        {(textData.length < ((window.innerWidth * window.innerHeight) / (240*160*2))) && (
+          <AddNewCard 
+            setData={setTextData} 
+            reference={ref} 
+            data={textData} 
+            setCount={setCount} 
+            count={count}
+          />
+        )}
         <AnimatePresence>
-          {data.map((item) => (
-            <Card
+          {textData.map((item) => (
+            <TextCard
               key={item.id}
               data={item}
               reference={ref}
-              setData={setData}
+              setData={setTextData}
+            />
+          ))}
+
+          {audioData.map((item) => (
+            <AudioCard
+              key={item.id}
+              data={item}
+              reference={ref}
+              setData={setAudioData}
             />
           ))}
         </AnimatePresence>
