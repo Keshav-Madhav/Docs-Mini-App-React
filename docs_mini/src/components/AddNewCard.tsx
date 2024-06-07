@@ -1,3 +1,4 @@
+import React from 'react'
 import { FaRegFileAlt } from 'react-icons/fa'
 import { motion } from "framer-motion"
 import { useState } from 'react'

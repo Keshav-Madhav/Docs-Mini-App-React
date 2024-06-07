@@ -1,3 +1,4 @@
+import React from 'react'
 import { FaRegFileAlt } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
 import { LuDownload } from 'react-icons/lu'

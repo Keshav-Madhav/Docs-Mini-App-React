@@ -1,6 +1,13 @@
 import { create } from 'zustand';
 
-export const mainStore = create((set) => ({
+type MainStore = {
+  isDrag: boolean;
+  setIsDrag: (value: boolean) => void;
+  forceRefresh: boolean;
+  toggleForceRefresh: () => void;
+};
+
+export const mainStore = create<MainStore>((set) => ({
   isDrag: false,
   setIsDrag: (value) => set({ isDrag: value }),
   forceRefresh: false,
