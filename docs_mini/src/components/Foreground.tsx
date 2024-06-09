@@ -6,6 +6,7 @@ import { mainStore } from './mainStore'
 import AddNewCard from "./AddNewCard"
 import { AnimatePresence } from "framer-motion"
 import AudioCard from "./AudioCard"
+import getFileSize from "../helpers/getSize"
 
 function Foreground() {
   const ref = useRef(null)
@@ -38,7 +39,7 @@ function Foreground() {
         if(e.target?.result) {
           const content = e.target.result;
           const title = uploadedFile.name.split(".")[0];
-          const size = uploadedFile.size / 1000 + " KB";
+          const size = getFileSize(uploadedFile.size);
           const tagDetails = {
             isOpen: true,
             tagTitle: "New",

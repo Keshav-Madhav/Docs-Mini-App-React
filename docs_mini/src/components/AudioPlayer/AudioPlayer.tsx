@@ -90,6 +90,7 @@ export default function AudioPlayer({
   return (
     <div className="bg-transparent-900 text-slate-400 relative mt-2">
       <audio
+        key={currentSong.src}
         ref={audioRef}
         preload="metadata"
         onDurationChange={(e) => setDuration(e.currentTarget.duration)}
@@ -106,6 +107,7 @@ export default function AudioPlayer({
         }}
         onProgress={handleBufferProgress}
         onVolumeChange={(e) => setVolume(e.currentTarget.volume)}
+        onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
       >
         <source type="audio/mpeg" src={currentSong.src} />
       </audio>

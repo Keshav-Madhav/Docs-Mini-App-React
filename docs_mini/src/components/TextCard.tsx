@@ -3,6 +3,7 @@ import { FaRegFileAlt } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
 import { LuDownload } from 'react-icons/lu'
 import { motion } from "framer-motion"
+import getFileSize from '../helpers/getSize'
 
 type Props = {
   data: textCard,
@@ -50,7 +51,7 @@ const TextCard = ({
           item.description = e.target.value;
 
           const blob = new Blob([item.description], {type: 'text/plain'});
-          item.size = blob.size / 1000 + " KB";
+          item.size = getFileSize(blob.size);
           item.download = true;
           item.tagDetails = {
             isOpen: true,
