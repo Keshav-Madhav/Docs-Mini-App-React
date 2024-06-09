@@ -1,24 +1,26 @@
 import React from "react"
-import TextCard from "./TextCard"
 import { useDropzone } from "react-dropzone"
 import { useEffect, useState, useRef } from "react"
 import { mainStore } from './mainStore'
 import AddNewCard from "./AddNewCard"
-import { AnimatePresence } from "framer-motion"
+import TextCard from "./TextCard"
 import AudioCard from "./AudioCard"
+import VideoCard from "./VideoCard"
+import { AnimatePresence } from "framer-motion"
 import getFileSize from "../helpers/getSize"
 
 function Foreground() {
   const ref = useRef(null)
   const [textData, setTextData] = useState<textCard[]>([])
   const [audioData, setAudioData] = useState<audioCard[]>([])
+  const [videoData, setVideoData] = useState<videoCard[]>([])
   const [uploadedFile, setUploadedFile] = useState<File>()
   const { setIsDrag } = mainStore();
   const [count, setCount] = useState(0);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     noClick: true,
-    accept: { 'text/plain': ['.txt'], 'audio/mpeg': ['.mp3'] },
+    accept: { 'text/plain': ['.txt'], 'audio/mpeg': ['.mp3'], 'video/mp4': ['.mp4'] },
     onDrop: (acceptedFiles) => {
       if (acceptedFiles.length > 0) {
         setUploadedFile(acceptedFiles[0]);
@@ -77,6 +79,20 @@ function Foreground() {
               });
               return newData;
             });
+          } else if (uploadedFile.type === 'video/mp4') {
+            const videoBlob = new Blob([content], { type: 'video/mp4' });
+            setVideoData((prevData) => {
+              const newData = [...prevData];
+              newData.push({
+                title,
+                size,
+                videoBlob,
+                tagDetails,
+                download,
+                id,
+              });
+              return newData;
+            });
           }
         }
       };
@@ -85,6 +101,8 @@ function Foreground() {
       if (uploadedFile.type === 'text/plain') {
         reader.readAsText(uploadedFile);
       } else if (uploadedFile.type === 'audio/mpeg') {
+        reader.readAsArrayBuffer(uploadedFile);
+      } else if (uploadedFile.type === 'video/mp4') {
         reader.readAsArrayBuffer(uploadedFile);
       }
     }
@@ -137,6 +155,15 @@ function Foreground() {
               data={item}
               reference={ref}
               setData={setAudioData}
+            />
+          ))}
+
+          {videoData.map((item) => (
+            <VideoCard
+              key={item.id}
+              data={item}
+              reference={ref}
+              setData={setVideoData}
             />
           ))}
         </AnimatePresence>

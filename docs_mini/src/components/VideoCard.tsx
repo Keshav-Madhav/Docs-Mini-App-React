@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { FaRegFileAlt } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
 import { LuDownload } from 'react-icons/lu'
@@ -7,30 +7,27 @@ import getFileSize from '../helpers/getSize'
 import ReactPlayer from 'react-player'
 
 type Props = {
-  data: textCard,
+  data: videoCard,
   reference: React.RefObject<HTMLDivElement>,
-  setData: React.Dispatch<React.SetStateAction<textCard[]>>
+  setData: React.Dispatch<React.SetStateAction<videoCard[]>>
 }
 
-const TextCard = ({
+const VideoCard = ({
   data,
   reference,
   setData,
 }:Props) => {
-  const [isVideo, setIsVideo] = useState(false);
-
-  useEffect(() => {
-    setIsVideo(ReactPlayer.canPlay(data.description));
-  }, [data.description]);
+  
 
   function downloadFile() {
-    const blob = new Blob([data.description], {type: 'text/plain'});
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = data.title + '.txt';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const url = URL.createObjectURL(data.videoBlob);
+    const a = document.createElement
+    ('a');
+    a.href= url;
+    a.download = data.title;
+    a.click();
+    URL.revokeObjectURL(url);
+
     setData((prevData) => {
       const newData = [...prevData];
       newData.forEach((item) => {
@@ -45,29 +42,6 @@ const TextCard = ({
       });
       return newData;
     });
-  }
-
-  function handleDescriptionChange(e) {
-    e.target.style.height = 'inherit';
-    e.target.style.height = `${e.target.scrollHeight-2}px`; 
-    setData((prevData) => {
-      const newData = [...prevData];
-      newData.forEach((item) => {
-        if (item.id === data.id) {
-          item.description = e.target.value;
-
-          const blob = new Blob([item.description], {type: 'text/plain'});
-          item.size = getFileSize(blob.size);
-          item.download = true;
-          item.tagDetails = {
-            isOpen: true,
-            tagTitle: "Updated",
-            tagColor: "rgb(37, 99, 235)",
-          };
-        }
-      });
-      return newData;
-    })
   }
 
   function handleNameChange(e) {
@@ -105,9 +79,9 @@ const TextCard = ({
         bounceStiffness: 200, 
         bounceDamping:20
       }} 
-      className={`relative flex-shrink-0 flex flex-col gap-4 ${isVideo ? 'w-[98%] md:w-[50%] lg:w-[35%]' : 'w-60'} h-fit min-h-40 rounded-[40px] bg-zinc-900/90 text-white overflow-hidden`}
+      className="relative flex-shrink-0 flex flex-col gap-0 w-[98%] md:w-[50%] lg:w-[35%] h-fit min-h-40 rounded-[40px] bg-zinc-900/90 text-white overflow-hidden"
     >
-      <div className='flex flex-col gap-4 w-full h-fit px-7 pt-8'>
+      <div className='flex flex-col gap-2 w-full h-fit px-7 pt-8'>
         <div className='flex items-center gap-2'>
           <FaRegFileAlt className='min-w-4 h-4'/>
           <input
@@ -118,29 +92,16 @@ const TextCard = ({
             }}
           />
         </div>
-
-         <div className='w-full h-fit flex flex-col'>
-          <textarea
-            className="w-full text-sm font-semibold leading-tight bg-transparent text-white outline-none resize-none overflow-hidden"
-            value={data.description}
-            onChange={(e) => {
-              handleDescriptionChange(e);
-            }}
-          />
-
-          {isVideo && (
-            <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
-              <ReactPlayer
-                url={data.description}
-                className="absolute top-0 left-0"
-                width="100%"
-                height="100%"
-                controls={true}
-                playing={false}
-              />
-            </div>
-          )}
-        </div>
+        
+        <ReactPlayer 
+          url={URL.createObjectURL(data.videoBlob)} 
+          width='100%' 
+          height='auto' 
+          controls={true} 
+          playing={false} 
+          loop={true} 
+          muted={true}
+        />
       </div>
 
       <div className={`w-full ${!data.tagDetails.isOpen && 'mb-2'}`}>
@@ -168,4 +129,4 @@ const TextCard = ({
   )
 }
 
-export default TextCard
+export default VideoCard
