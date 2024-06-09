@@ -44,9 +44,9 @@ const AddNewCard = ({
         bounceStiffness: 200, 
         bounceDamping:20
       }} 
-      className="relative flex-shrink-0 flex flex-col gap-4 w-60 h-fit min-h-40 rounded-[40px] bg-zinc-900/90 text-white overflow-hidden"
+      className="relative flex-shrink-0 flex flex-col gap-3 w-[12.5rem] h-[11rem] rounded-[40px] bg-zinc-900/90 text-white overflow-hidden"
     >
-      <div className='flex flex-col gap-4 w-full h-full px-7 pt-8'>
+      <div className='flex flex-col gap-3 w-full h-full px-6 pt-5'>
         <div className='flex items-center gap-2'>
           <FaRegFileAlt className='min-w-4 h-4'/>
           <input

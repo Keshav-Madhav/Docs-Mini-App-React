@@ -111,7 +111,7 @@ function Foreground() {
       />
 
 
-      <div ref={ref} className="fixed w-full h-full flex gap-6 flex-wrap p-5">
+      <div ref={ref} className="fixed w-full h-full flex gap-3 flex-wrap p-4">
         {(textData.length < ((window.innerWidth * window.innerHeight) / (240*160*2))) && (
           <AddNewCard 
             setData={setTextData} 
