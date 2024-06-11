@@ -106,13 +106,15 @@ const AddNewCard = ({
       </div>
 
       <div className='w-full'>
-        <div 
+        <motion.div 
+          whileHover={{ scale: 1.04}}
+          whileTap={{ scale: 1 }}
           onClick={cycleType}
-          className='w-full h-10 flex items-center justify-center cursor-pointer' 
-          style={{ backgroundColor: "rgb(147,112,219)" }}
+          className='w-full h-10 flex items-center justify-center cursor-pointer bg-[rgb(147,112,219)] hover:bg-[rgb(105,77,162)] transition-colors' 
+          style={{ backgroundColor: "" }}
         >
           <h3 className='text-sm font-semibold'>Add New {type}</h3>
-        </div>
+        </motion.div>
       </div>
     </motion.div>
   )

@@ -166,13 +166,25 @@ const AudioCard = ({
           <h5>{data.size}</h5>
           <div className='flex items-center gap-3'>
             {data.download && (
-              <div onClick={downloadFile} title='Download' className='w-6 h-6 flex items-center justify-center bg-zinc-500 hover:bg-zinc-600 text-white/80 hover:text-white rounded-full cursor-pointer'>
+              <motion.div 
+                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.2 }}
+                onClick={downloadFile} 
+                title='Download' 
+                className='w-6 h-6 flex items-center justify-center bg-zinc-500 hover:bg-zinc-600 text-white/80 hover:text-white rounded-full cursor-pointer'
+              >
                 <LuDownload className='h-3 w-3' />
-              </div>
+              </motion.div>
             )}
-            <div onClick={removeNote} title="Remove" className='w-6 h-6 flex items-center justify-center bg-zinc-500 hover:bg-zinc-600 text-white/80 hover:text-white rounded-full cursor-pointer'>
+            <motion.div 
+              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.2 }}
+              onClick={removeNote} 
+              title="Remove" 
+              className='w-6 h-6 flex items-center justify-center bg-zinc-500 hover:bg-zinc-600 text-white/80 hover:text-white rounded-full cursor-pointer'
+            >
               <IoClose className='h-4 w-4' />
-            </div>
+            </motion.div>
           </div>
         </div>
 
