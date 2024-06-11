@@ -5,20 +5,21 @@ import { LuDownload } from 'react-icons/lu'
 import { motion } from "framer-motion"
 import getFileSize from '../helpers/getSize'
 import ReactPlayer from 'react-player'
+import { FaRegFileVideo } from 'react-icons/fa6'
 
 type Props = {
   data: videoCard,
   reference: React.RefObject<HTMLDivElement>,
   setData: React.Dispatch<React.SetStateAction<videoCard[]>>
+  setCount: React.Dispatch<React.SetStateAction<number>>
 }
 
 const VideoCard = ({
   data,
   reference,
   setData,
+  setCount,
 }:Props) => {
-  
-
   function downloadFile() {
     const url = URL.createObjectURL(data.videoBlob);
     const a = document.createElement
@@ -63,6 +64,7 @@ const VideoCard = ({
   }
 
   function removeNote() {
+    setCount((prevCount) => prevCount - 1);
     setData((prevData) => {
       const newData = prevData.filter((item) => item.id !== data.id);
       return newData;
@@ -83,7 +85,7 @@ const VideoCard = ({
     >
       <div className='flex flex-col gap-2 w-full h-fit px-7 pt-8'>
         <div className='flex items-center gap-2'>
-          <FaRegFileAlt className='min-w-4 h-4'/>
+          <FaRegFileVideo className='min-w-4 h-4'/>
           <input
             className='text-md font-semibold bg-transparent outline-none text-white w-[80%] truncate'
             value={data.title}

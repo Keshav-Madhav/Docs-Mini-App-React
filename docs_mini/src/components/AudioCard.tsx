@@ -6,17 +6,20 @@ import { motion } from 'framer-motion';
 import AudioPlayer from './AudioPlayer/AudioPlayer';
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 import getFileSize from '../helpers/getSize';
+import { FaRegFileAudio } from 'react-icons/fa6';
 
 type Props = {
   data: audioCard;
   reference: React.RefObject<HTMLDivElement>;
   setData: React.Dispatch<React.SetStateAction<audioCard[]>>;
+  setCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const AudioCard = ({
   data,
   reference,
   setData,
+  setCount
 }: Props) => {
   const [recordState, setRecordState] = useState<RecordState | null>(null);
 
@@ -91,6 +94,7 @@ const AudioCard = ({
   };
 
   const removeNote = () => {
+    setCount((prevCount) => prevCount - 1);
     setData((prevData) => {
       const newData = prevData.filter((item) => item.id !== data.id);
       return newData;
@@ -111,7 +115,7 @@ const AudioCard = ({
     >
       <div className='flex flex-col gap-4 w-full h-fit px-7 pt-8'>
         <div className='flex items-center gap-2'>
-          <FaRegFileAlt className='min-w-4 h-4' />
+          <FaRegFileAudio className='min-w-4 h-4'/>
           <input
             className='text-md font-semibold bg-transparent outline-none text-white w-[80%] truncate'
             value={data.title}

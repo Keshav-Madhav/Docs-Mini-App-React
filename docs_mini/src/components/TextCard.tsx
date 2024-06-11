@@ -10,12 +10,14 @@ type Props = {
   data: textCard,
   reference: React.RefObject<HTMLDivElement>,
   setData: React.Dispatch<React.SetStateAction<textCard[]>>
+  setCount: React.Dispatch<React.SetStateAction<number>>
 }
 
 const TextCard = ({
   data,
   reference,
   setData,
+  setCount,
 }:Props) => {
   const [isVideo, setIsVideo] = useState(false);
 
@@ -89,6 +91,7 @@ const TextCard = ({
   }
 
   function removeNote() {
+    setCount((prevCount) => prevCount - 1);
     setData((prevData) => {
       const newData = prevData.filter((item) => item.id !== data.id);
       return newData;
