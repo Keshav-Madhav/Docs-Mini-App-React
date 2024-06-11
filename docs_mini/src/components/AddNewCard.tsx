@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaRegFileAlt } from 'react-icons/fa';
+import { FaRegFileAlt, FaRegFileAudio, FaRegFileVideo } from 'react-icons/fa';
 import { motion } from "framer-motion";
 import { PiPlusCircle } from 'react-icons/pi';
 
@@ -11,7 +11,7 @@ const AddNewCard = ({
   setCount,
   count,
 }) => {
-  const [tempData, setTempData] = useState({ title: 'New' });
+  const [title, setTitle] = useState('New Text Note');
   const types = ['Text', 'Video', 'Audio'];
   const [typeIndex, setTypeIndex] = useState(0);
   const type = types[typeIndex];
@@ -21,7 +21,7 @@ const AddNewCard = ({
       setTextData((prevData) => {
         const newData = [...prevData];
         newData.push({
-          title: tempData.title,
+          title: title,
           size: '0 KB',
           description: '',
           tagDetails: {
@@ -38,7 +38,7 @@ const AddNewCard = ({
       setAudioData((prevData) => {
         const newData = [...prevData];
         newData.push({
-          title: tempData.title,
+          title: title,
           size: '0 KB',
           audioBlob: new Blob(),
           tagDetails: {
@@ -55,7 +55,7 @@ const AddNewCard = ({
       setVideoData((prevData) => {
         const newData = [...prevData];
         newData.push({
-          title: tempData.title,
+          title: title,
           size: '0 KB',
           videoBlob: new Blob(),
           tagDetails: {
@@ -70,10 +70,11 @@ const AddNewCard = ({
       });
     }
     setCount((prevCount) => prevCount + 1);
-    setTempData({ title: 'New' });
+    setTitle('New ' + type + ' Note');
   }
 
   function cycleType() {
+    setTitle((prev)=> prev.replace(types[typeIndex], types[(typeIndex + 1) % types.length]));
     setTypeIndex((prevIndex) => (prevIndex + 1) % types.length);
   }
 
@@ -84,16 +85,18 @@ const AddNewCard = ({
       whileDrag={{ scale: 1.1 }} 
       dragElastic={0.3} 
       dragTransition={{ bounceStiffness: 200, bounceDamping: 20 }} 
-      className="relative flex-shrink-0 flex flex-col gap-3 w-[12.5rem] h-[11rem] rounded-[40px] bg-zinc-900/90 text-white overflow-hidden"
+      className="absolute flex-shrink-0 flex flex-col gap-3 w-[12.5rem] h-[11rem] rounded-[40px] bg-zinc-900/90 text-white overflow-hidden"
     >
       <div className='flex flex-col gap-3 w-full h-full px-6 pt-5'>
         <div className='flex items-center gap-2'>
-          <FaRegFileAlt className='min-w-4 h-4'/>
+          {type === 'Text' && <FaRegFileAlt className='min-w-4 h-4'/>}
+          {type === 'Audio' && <FaRegFileAudio className='min-w-4 h-4'/>}
+          {type === 'Video' && <FaRegFileVideo className='min-w-4 h-4'/>}
           <input
             className='text-md font-semibold bg-transparent outline-none text-white w-[80%] truncate'
-            value={tempData.title}
+            value={title}
             onChange={(e) => {
-              setTempData({ title: e.target.value });
+              setTitle( e.target.value );
             }}
           />
         </div>

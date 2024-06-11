@@ -130,16 +130,6 @@ function Foreground() {
 
 
       <div ref={ref} className="fixed w-full h-full flex gap-3 flex-wrap p-4">
-        {(textData.length < ((window.innerWidth * window.innerHeight) / (240*160*2))) && (
-          <AddNewCard 
-            setTextData={setTextData} 
-            setAudioData={setAudioData}
-            setVideoData={setVideoData}
-            reference={ref} 
-            setCount={setCount} 
-            count={count}
-          />
-        )}
         <AnimatePresence>
           {textData.map((item) => (
             <TextCard
@@ -171,6 +161,17 @@ function Foreground() {
             />
           ))}
         </AnimatePresence>
+
+        {(textData.length < ((window.innerWidth * window.innerHeight) / (240*160*2))) && (
+          <AddNewCard 
+            setTextData={setTextData} 
+            setAudioData={setAudioData}
+            setVideoData={setVideoData}
+            reference={ref} 
+            setCount={setCount} 
+            count={count}
+          />
+        )}
       </div>
     </div>
   )

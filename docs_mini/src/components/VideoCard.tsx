@@ -82,7 +82,7 @@ const VideoCard = ({
         bounceStiffness: 200, 
         bounceDamping:20
       }} 
-      className="relative flex-shrink-0 flex flex-col gap-0 w-[98%] md:w-[50%] lg:w-[35%] h-fit min-h-40 rounded-[40px] bg-zinc-900/90 text-white overflow-hidden"
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-shrink-0 flex flex-col gap-0 w-[98%] md:w-[50%] lg:w-[35%] h-fit min-h-40 rounded-[40px] bg-zinc-900/90 text-white overflow-hidden"
     >
       <div className='flex flex-col gap-2 w-full h-fit px-7 pt-8'>
         <div className='flex items-center gap-2'>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { LuDownload } from 'react-icons/lu';
 import { motion } from 'framer-motion';
@@ -23,6 +23,23 @@ const AudioCard = ({
 }: Props) => {
   const [recordState, setRecordState] = useState<RecordState | null>(null);
   const [micPermission, setMicPermission] = useState<boolean | null>(null);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if(divRef.current && reference.current){
+      // Get the dimensions of the parent div and the card itself
+      const parentDimensions = reference.current.getBoundingClientRect();
+      const cardDimensions = divRef.current.getBoundingClientRect();
+
+      // Calculate random position
+      const randomTop = Math.random() * (parentDimensions.height - cardDimensions.height);
+      const randomLeft = Math.random() * (parentDimensions.width - cardDimensions.width);
+
+      // Set the position state
+      setPosition({ top: randomTop, left: randomLeft });
+    }
+  }, []);
 
   // Function to check microphone permission
   const checkMicrophonePermission = async () => {
@@ -130,7 +147,12 @@ const AudioCard = ({
         bounceStiffness: 200,
         bounceDamping: 20,
       }}
-      className="relative flex-shrink-0 flex flex-col w-80 h-fit rounded-[40px] bg-zinc-900/90 text-white overflow-hidden"
+      ref={divRef}
+      style={{
+        top: position.top,
+        left: position.left,
+      }}
+      className="absolute flex-shrink-0 flex flex-col w-80 h-fit rounded-[40px] bg-zinc-900/90 text-white overflow-hidden"
     >
       <div className='flex flex-col gap-4 w-full h-fit px-7 pt-8'>
         <div className='flex items-center gap-2'>
