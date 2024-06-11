@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { FaRegFileAlt } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { LuDownload } from 'react-icons/lu';
 import { motion } from 'framer-motion';
@@ -7,6 +6,7 @@ import AudioPlayer from './AudioPlayer/AudioPlayer';
 import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 import getFileSize from '../helpers/getSize';
 import { FaRegFileAudio } from 'react-icons/fa6';
+import { toast } from 'sonner';
 
 type Props = {
   data: audioCard;
@@ -22,9 +22,27 @@ const AudioCard = ({
   setCount
 }: Props) => {
   const [recordState, setRecordState] = useState<RecordState | null>(null);
+  const [micPermission, setMicPermission] = useState<boolean | null>(null);
+
+  // Function to check microphone permission
+  const checkMicrophonePermission = async () => {
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      setMicPermission(true);
+    } catch (err) {
+      console.error(err);
+      setMicPermission(false);
+    }
+  };
 
   const startRecording = () => {
-    setRecordState(RecordState.START);
+    if (micPermission) {
+      setRecordState(RecordState.START);
+    } else {
+      checkMicrophonePermission();
+      toast.error('Microphone permission not granted');
+      console.error('Microphone permission not granted');
+    }
   };
 
   const stopRecording = () => {
@@ -58,6 +76,7 @@ const AudioCard = ({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    toast.success(`Downloaded ${data.title}`);
 
     setData((prevData) => {
       const newData = [...prevData];

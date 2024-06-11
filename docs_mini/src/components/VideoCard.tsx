@@ -1,11 +1,11 @@
 import React from 'react'
-import { FaRegFileAlt } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
 import { LuDownload } from 'react-icons/lu'
 import { motion } from "framer-motion"
 import getFileSize from '../helpers/getSize'
 import ReactPlayer from 'react-player'
 import { FaRegFileVideo } from 'react-icons/fa6'
+import { toast } from 'sonner'
 
 type Props = {
   data: videoCard,
@@ -28,6 +28,7 @@ const VideoCard = ({
     a.download = data.title;
     a.click();
     URL.revokeObjectURL(url);
+    toast.success(`Downloaded ${data.title}`);
 
     setData((prevData) => {
       const newData = [...prevData];

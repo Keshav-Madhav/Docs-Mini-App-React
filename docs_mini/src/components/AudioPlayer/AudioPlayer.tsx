@@ -34,7 +34,7 @@ export default function AudioPlayer({
   const [duration, setDuration] = React.useState(0);
   const [currrentProgress, setCurrrentProgress] = React.useState(0);
   const [buffered, setBuffered] = React.useState(0);
-  const [volume, setVolume] = React.useState(0.2);
+  const [volume, setVolume] = React.useState(0.9);
   const [isPlaying, setIsPlaying] = React.useState(false);
 
   const durationDisplay = formatDurationDisplay(duration);

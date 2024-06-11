@@ -5,6 +5,7 @@ import { LuDownload } from 'react-icons/lu'
 import { motion } from "framer-motion"
 import getFileSize from '../helpers/getSize'
 import ReactPlayer from 'react-player'
+import { toast } from 'sonner'
 
 type Props = {
   data: textCard,
@@ -33,6 +34,8 @@ const TextCard = ({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    toast.success(`Downloaded ${data.title}`);
+
     setData((prevData) => {
       const newData = [...prevData];
       newData.forEach((item) => {
